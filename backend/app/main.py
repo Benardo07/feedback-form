@@ -5,6 +5,7 @@ from .database import get_db
 from .models import Feedback as DBFeedback
 from .schemas import FeedbackCreate, Feedback
 from typing import List
+from sqlalchemy import select
 
 app = FastAPI()
 

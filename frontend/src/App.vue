@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <FeedbackForm/>
+    <router-view></router-view> <!-- This element will display routed components -->
   </div>
 </template>
-
 <script>
 import FeedbackForm from './components/FeedbackForm.vue';
 
