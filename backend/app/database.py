@@ -25,7 +25,8 @@ engine = create_async_engine(
 )
 
 async_session = sessionmaker(
-    engine,
+    bind=engine,
+    autocommit=False,
     autoflush=False,
     expire_on_commit=False,
     class_=AsyncSession
@@ -34,5 +35,11 @@ async_session = sessionmaker(
 # Using the session
 async def get_db():
     async with async_session() as session:
-        yield session
+        try:
+            yield session
+        except Exception as e:
+            await session.rollback()
+            raise e
+        finally:
+            await session.close()
         
