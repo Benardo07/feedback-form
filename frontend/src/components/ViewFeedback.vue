@@ -46,7 +46,7 @@ export default {
   },
   async created() {
     try {
-      const response = await fetch('http://localhost:8000/feedback/');
+      const response = await fetch('https://feedback-form-api-teal.vercel.app/feedback/');
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }

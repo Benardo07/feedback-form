@@ -48,7 +48,7 @@ export default {
   methods: {
     async fetchQuestions() {
       try {
-        const response = await fetch("http://localhost:8000/questions");
+        const response = await fetch("https://feedback-form-api-teal.vercel.app/questions");
         const data = await response.json();
         this.questions = data;
         this.ratings = new Array(data.length).fill(0);
@@ -76,7 +76,7 @@ export default {
         return;
       }
       try {
-        const response = await fetch("http://localhost:8000/feedback/", {
+        const response = await fetch("https://feedback-form-api-teal.vercel.app/feedback/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
