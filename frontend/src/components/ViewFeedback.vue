@@ -1,15 +1,22 @@
 <template>
-  <div>
-    <h1>Feedback Received</h1>
-    <div v-for="feedback in feedbacks" :key="feedback.id" class="feedback-box">
-      <p><strong>Submitted on:</strong> {{ formatDate(feedback.created_at) }}</p>
-      <div v-for="rating in feedback.ratings" :key="rating.id">
-        <p  v-if="rating.question"><strong>{{ rating.question.text }}</strong></p>
-        <p v-else>No question available</p>
-        <p>Rating: <span v-for="n in rating.score" :key="n">★</span></p>
+  <div class="parent">
+    <div class="title-container">
+      <h1>Feedback Received</h1>
+      <button @click="goToWriteFeedback">Write Feedback</button>
+    </div>
+    <div class="feedback-container">
+      <div v-for="(feedback, index) in feedbacks" :key="feedback.id" class="feedback-box">
+        <p><strong class="highlight">Submitted on:</strong> {{ formatDate(feedback.created_at) }}</p>
+        <div v-for="(rating, ratingIndex) in feedback.ratings" :key="rating.id" class="rating-item">
+          <p v-if="rating.question"><strong>{{ ratingIndex + 1 }}. {{ rating.question.text }}</strong></p>
+          <p v-else>No question available</p>
+          <p>
+            Rating: 
+            <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= rating.score }">★</span>
+          </p>
+        </div>
       </div>
     </div>
-    <button @click="goToWriteFeedback">Write Feedback</button>
   </div>
 </template>
 
@@ -54,35 +61,104 @@ export default {
 </script>
 
 <style scoped>
+.parent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.highlight{
+  font-weight: bolder;
+  color: #28a745;
+  margin-right: 5px;
+  font-size: 20px;
+}
+
+.title-container {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  flex: 1;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+.feedback-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Allow feedback boxes to wrap to the next line */
+  gap: 20px;
+  justify-content: center; /* Center the feedback boxes */
+  margin-bottom: 20px;
+  overflow-y: auto; /* Make the container scrollable if necessary */
+  max-height: 80vh; /* Prevent overflow beyond viewport height */
+  width: 100%; /* Ensure container takes full width */
+}
+
+.feedback-container::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar */
+}
+
+.feedback-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .feedback-box {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   padding: 20px;
-  color: black;
-  margin: 20px 0;
   border-radius: 10px;
-  background-color: #f9f9f9;
+  background-color: #2c3e50;
+  color: white;
+  width: 400px; /* Fixed width for feedback box */
+  box-sizing: border-box;
+  margin: 10px; /* Add margin for spacing */
 }
 
 .feedback-box p {
   margin: 5px 0;
 }
 
-.rating span {
-  color: gold;
+.rating-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.star {
   font-size: 20px;
+  color: grey;
+}
+
+.star.active {
+  color: gold;
 }
 
 button {
-  margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007BFF;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  align-self: flex-end;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
+}
+
+button:focus {
+  outline: none;
 }
 </style>
