@@ -76,7 +76,7 @@ export default {
         return;
       }
       try {
-        const response = await fetch("https://feedback-form-api-teal.vercel.app/feedback/", {
+        const response = await fetch("https://feedback-form-api-teal.vercel.app/feedback", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
