@@ -14,8 +14,9 @@ A web application to collect feedback through forms, built with FastAPI for the 
 - **FastAPI**: Web framework for building APIs with Python 3.7+
 - **SQLAlchemy**: SQL toolkit and ORM
 - **PostgreSQL**: Relational database
-- **pytest**: Testing framework
 - **HTTPX**: HTTP client for testing
+- **Alembic**: database migration tool for SQLAlchemy
+- **Pydantic": data validation 
 
 ### Frontend
 - **Vue js**: JavaScript library for building user interfaces
