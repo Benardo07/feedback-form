@@ -185,4 +185,28 @@ button:hover {
 button:focus {
   outline: none;
 }
+
+@media (max-width: 768px) {
+  h1{
+    font-size: 32px; /* Smaller font size on smaller screens */
+  }
+
+  button{
+    padding: 5px 10px;
+    margin: 5px;
+    font-size: 12px;
+  }
+  .title-container{
+    flex-direction: column;
+    gap:10px;
+  }
+
+  .feedback-box{
+    width: 300px;
+    padding: 10px;
+    margin: 8px;
+    font-size: 14px;
+  }
+
+}
 </style>

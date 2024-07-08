@@ -129,6 +129,7 @@ export default {
 </script>
 
 <style scoped>
+
 .parent {
   display: flex;
   flex-direction: column;
@@ -240,5 +241,38 @@ button:disabled {
 
 button:hover:enabled {
   background-color: darkgreen;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 32px; /* Smaller font size on smaller screens */
+  }
+
+  .questionText {
+    font-size: 24px; /* Smaller font size on smaller screens */
+  }
+
+  .rating {
+    font-size: 35px; /* Smaller star rating on smaller screens */
+  }
+
+  .rating span {
+    font-size: 35px; /* Keep consistent with .rating size */
+  }
+
+  .ratingText {
+    font-size: 16px; /* Smaller description font size */
+  }
+
+  .buttons button {
+    padding: 8px 16px; /* Smaller padding for buttons */
+    font-size: 14px; /* Smaller font size for buttons */
+  }
+
+  .parent {
+    width: 95%; /* Make the width responsive */
+    padding: 10px; /* Add padding to avoid touching the screen edges */
+  }
+
 }
 </style>

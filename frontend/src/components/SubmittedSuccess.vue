@@ -62,5 +62,22 @@
   button:hover {
     background-color: darkgreen;
   }
+
+  
+@media (max-width: 768px) {
+  h1{
+    font-size: 32px; /* Smaller font size on smaller screens */
+  }
+
+  button{
+    padding: 5px 10px;
+    margin: 5px;
+    font-size: 12px;
+  }
+  .button-container{
+    gap: 15px;
+  }
+
+}
   </style>
   
