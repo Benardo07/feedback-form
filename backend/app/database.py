@@ -19,9 +19,10 @@ if SSL_MODE == "require":
 engine = create_async_engine(
     DATABASE_URL,
     echo=True,
-    connect_args={"ssl": ssl_context},
-    pool_size=10,  # Adjust pool size as needed
-    max_overflow=20,  # Adjust overflow as needed
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,  # 30 seconds
+    pool_recycle=1800  # Recycle connections after 30 minutes
 )
 
 async_session = sessionmaker(
