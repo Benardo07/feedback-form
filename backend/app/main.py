@@ -65,9 +65,14 @@ async def create_feedback(feedback_data: FeedbackCreate, db: AsyncSession = Depe
 @app.get("/questions", response_model=List[QuestionSchema])
 async def read_questions(db: AsyncSession = Depends(get_db)):
     async with db as session:
-        result = await session.execute(select(Question))
-        questions = result.scalars().all()
-        return questions
+        try:
+            result = await session.execute(select(Question))
+            questions = result.scalars().all()
+            return questions
+        finally:
+            await session.close()
+
+    
 
 
 @app.get("/feedback/", response_model=List[FeedbackOut])
