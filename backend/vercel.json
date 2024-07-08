@@ -1,17 +1,18 @@
 {
-    "devCommand" : "uvicorn app.main:app --reload",
-    "builds" : [
+    "builds": [
         {
             "src": "app/main.py",
             "use": "@vercel/python"
         }
     ],
-    "routes" : [
+    "routes": [
         {
-            "src" : "/(.*)",
-            "dest" : "app/main.py"
+            "src": "/(.*)",
+            "dest": "app/main.py"
         }
     ],
-    "buildCommand": "pip install -r requirements.txt && alembic upgrade head"
-
+    "buildCommand": "pip install -r requirements.txt && alembic upgrade head",
+    "env": {
+        "DATABASE_URL": "postgresql+asyncpg://avnadmin:AVNS_naBaRsjsU2acdla9JSG@pg-7f676dd-benardo188.c.aivencloud.com:20799/feedback-form"
+    }
 }
