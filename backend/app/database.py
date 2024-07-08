@@ -18,13 +18,10 @@ if SSL_MODE == "require":
     ssl_context.verify_mode = ssl.CERT_NONE
 
 engine = create_async_engine(
-    DATABASE_URL,
-    echo=True,
-    pool_size=5,
-    max_overflow=10,
-    pool_timeout=30,  # 30 seconds
-    pool_recycle=1800  # Recycle connections after 30 minutes
-)
+        DATABASE_URL,
+        echo=True,
+        poolclass=NullPool  # Disable pooling
+    )
 
 async_session = sessionmaker(
     bind=engine,
@@ -36,12 +33,7 @@ async_session = sessionmaker(
 
 # Using the session
 async def get_db():
-    engine = create_async_engine(
-        DATABASE_URL,
-        echo=True,
-        poolclass=NullPool  # Disable pooling
-    )
-    async_session = sessionmaker(engine, class_=AsyncSession)
+
     async with async_session() as session:
         yield session
         
