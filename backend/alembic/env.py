@@ -18,6 +18,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 # Set the metadata object here for Alembic to access it
 target_metadata = Base.metadata
 
@@ -32,7 +33,7 @@ def do_run_migrations(connection):
 
 async def run_migrations_online():
     connectable = create_async_engine(
-        os.getenv("DATABASE_URL"),
+        config.get_main_option("sqlalchemy.url"),
         echo=True,
         future=True
     )
