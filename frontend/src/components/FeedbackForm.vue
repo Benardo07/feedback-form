@@ -1,26 +1,34 @@
 <template>
   <div class="parent">
     <h2 class="title">Rate Your Experience</h2>
-    <div class="progress-bar">
-      <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
+    <!-- Loading indicator for fetching questions -->
+    <div v-if="loadingQuestions" class="loader"></div>
+    <div v-else>
+      <div class="progress-bar">
+        <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
+      </div>
+      <div v-if="currentQuestion" class="content">
+        <p class="questionText">{{ currentQuestion.text }}</p>
+        <div class="rating">
+          <span v-for="star in 5" :key="star"
+                @click="setRating(star)"
+                :class="{ active: star <= ratings[currentIndex] }">
+            ★
+          </span>
+        </div>
+        <p class="ratingText">
+          {{ ratingDescriptions[ratings[currentIndex] - 1] || '' }}
+        </p>
+        <div class="buttons">
+          <button :disabled="currentIndex === 0" @click="previousQuestion">Back</button>
+          <button v-if="currentIndex < questions.length - 1" @click="nextQuestion">Next</button>
+          <button v-else @click="submitFeedback">Submit</button>
+        </div>
+      </div>
     </div>
-    <div v-if="currentQuestion" class="content">
-      <p class="questionText">{{ currentQuestion.text }}</p>
-      <div class="rating">
-        <span v-for="star in 5" :key="star"
-              @click="setRating(star)"
-              :class="{ active: star <= ratings[currentIndex] }">
-          ★
-        </span>
-      </div>
-      <p class="ratingText">
-        {{ ratingDescriptions[ratings[currentIndex] - 1] || '' }}
-      </p>
-      <div class="buttons">
-        <button :disabled="currentIndex === 0" @click="previousQuestion">Back</button>
-        <button v-if="currentIndex < questions.length - 1" @click="nextQuestion">Next</button>
-        <button v-else @click="submitFeedback">Submit</button>
-      </div>
+    <!-- Loading indicator for submitting feedback -->
+    <div v-if="loadingFeedback" class="overlay" >
+      <div class="loader"></div>
     </div>
   </div>
 </template>
@@ -35,6 +43,8 @@ export default {
       ratings: [],
       currentIndex: 0,
       ratingDescriptions: ["Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"],
+      loadingQuestions: false,
+      loadingFeedback: false
     };
   },
   computed: {
@@ -47,6 +57,7 @@ export default {
   },
   methods: {
     async fetchQuestions() {
+      this.loadingQuestions = true;
       try {
         const response = await fetch("https://feedback-form-api-teal.vercel.app/questions");
         const data = await response.json();
@@ -54,6 +65,8 @@ export default {
         this.ratings = new Array(data.length).fill(0);
       } catch (error) {
         console.error("Error fetching questions:", error);
+      }finally {
+        this.loadingQuestions = false;
       }
     },
     setRating(star) {
@@ -70,6 +83,7 @@ export default {
       }
     },
     async submitFeedback() {
+      this.loadingFeedback = true;
       const toast = useToast();
       if (this.ratings.includes(0)) {
         alert("Please rate all questions before submitting.");
@@ -103,6 +117,8 @@ export default {
         toast.error("Failed to submit feedback.", {
           timeout: 2000
         });
+      }finally {
+        this.loadingFeedback = false;
       }
     },
   },
@@ -122,6 +138,34 @@ export default {
   margin: 0 auto;
   height: 100vh;
 }
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50; /* Ensure it's above other content */
+}
+
+
+.loader {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #25b09b;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
 
 .title {
   font-size: 50px;

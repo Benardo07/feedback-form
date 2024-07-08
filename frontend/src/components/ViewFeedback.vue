@@ -4,7 +4,9 @@
       <h1>Feedback Received</h1>
       <button @click="goToWriteFeedback">Write Feedback</button>
     </div>
-    <div class="feedback-container">
+    <div v-if="loadingFeedback" class="loader">
+    </div>
+    <div v-else class="feedback-container">
       <div v-for="(feedback, index) in feedbacks" :key="feedback.id" class="feedback-box">
         <p><strong class="highlight">Submitted on:</strong> {{ formatDate(feedback.created_at) }}</p>
         <div v-for="(rating, ratingIndex) in feedback.ratings" :key="rating.id" class="rating-item">
@@ -24,7 +26,8 @@
 export default {
   data() {
     return {
-      feedbacks: []
+      feedbacks: [],
+      loadingFeedback: false
     };
   },
   methods: {
@@ -46,6 +49,7 @@ export default {
   },
   async created() {
     try {
+      this.loadingFeedback = true;
       const response = await fetch('https://feedback-form-api-teal.vercel.app/feedback/');
       if (!response.ok) {
         throw new Error('Failed to fetch');
@@ -55,6 +59,8 @@ export default {
     } catch (error) {
       alert('Failed to fetch feedback');
       console.error('Error fetching feedback:', error);
+    }finally{
+      this.loadingFeedback = false;
     }
   }
 };
@@ -69,6 +75,23 @@ export default {
   align-items: center;
 
 }
+
+.loader {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #25b09b;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
 
 .highlight{
   font-weight: bolder;
@@ -148,6 +171,7 @@ button {
   padding: 10px 20px;
   background-color: #28a745;
   color: white;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
