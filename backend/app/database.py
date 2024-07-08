@@ -1,9 +1,13 @@
 # database.py
+import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 import ssl
+from dotenv import load_dotenv
 
-DATABASE_URL = "postgresql+asyncpg://avnadmin:AVNS_naBaRsjsU2acdla9JSG@pg-7f676dd-benardo188.c.aivencloud.com:20799/feedback-form"
+# Load environment variables from .env file
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
 SSL_MODE = "require"
 
 ssl_context = ssl.create_default_context(cafile="ca.pem")  # Adjust path as needed

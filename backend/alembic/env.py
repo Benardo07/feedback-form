@@ -4,6 +4,11 @@ from sqlalchemy import pool
 from alembic import context
 import asyncio
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Assuming your models are defined in 'myapp/models.py' and
 # you have a Base class that inherits from declarative_base()
@@ -27,7 +32,7 @@ def do_run_migrations(connection):
 
 async def run_migrations_online():
     connectable = create_async_engine(
-        config.get_main_option("sqlalchemy.url"),
+        os.getenv("DATABASE_URL"),
         echo=True,
         future=True
     )
