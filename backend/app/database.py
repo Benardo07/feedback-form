@@ -18,11 +18,13 @@ engine = create_async_engine(
     connect_args={"ssl": ssl_context}
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
+async_session = sessionmaker(
+    engine,
+    expire_on_commit=False,
+    class_=AsyncSession
+)
 
+# Using the session
 async def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        await db.close()
+    async with async_session() as session:
+        yield session
