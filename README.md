@@ -16,7 +16,7 @@ A web application to collect feedback through forms, built with FastAPI for the 
 - **PostgreSQL**: Relational database
 - **HTTPX**: HTTP client for testing
 - **Alembic**: database migration tool for SQLAlchemy
-- **Pydantic": data validation 
+- **Pydantic**: data validation 
 
 ### Frontend
 - **Vue js**: JavaScript library for building user interfaces
