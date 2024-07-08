@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 import ssl
 from dotenv import load_dotenv
+from sqlalchemy.pool import NullPool
 
 # Load environment variables from .env file
 load_dotenv()
@@ -35,12 +36,12 @@ async_session = sessionmaker(
 
 # Using the session
 async def get_db():
+    engine = create_async_engine(
+        DATABASE_URL,
+        echo=True,
+        poolclass=NullPool  # Disable pooling
+    )
+    async_session = sessionmaker(engine, class_=AsyncSession)
     async with async_session() as session:
-        try:
-            yield session
-        except Exception as e:
-            await session.rollback()
-            raise e
-        finally:
-            await session.close()
+        yield session
         
